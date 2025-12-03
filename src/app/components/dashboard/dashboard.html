@@ -1,0 +1,25 @@
+<h2>Dashboard</h2>
+
+<section class="dashboard-section">
+  <h3>Héros marquants</h3>
+  <div class="card-list">
+    @for (hero of topHeroes; track hero.id) {
+      <a class="card" [routerLink]="['/heroes', hero.id]">
+        <h4>{{ hero.name }}</h4>
+        <p>Att: {{ hero.attack }} | Dég: {{ hero.damage }}</p>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="dashboard-section">
+  <h3>Équipements marquantes</h3>
+  <div class="card-list">
+    @for (weapon of topWeapons; track weapon.id) {
+      <a class="card" [routerLink]="['/weapons', weapon.id]">
+        <h4>{{ weapon.name }}</h4>
+        <p>Att: {{ weapon.attack }} | Dég: {{ weapon.damage }}</p>
+      </a>
+    }
+  </div>
+</section>

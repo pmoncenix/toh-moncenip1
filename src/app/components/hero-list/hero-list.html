@@ -1,0 +1,73 @@
+<h2>Héros</h2>
+
+<div class="toolbar">
+  <label>
+    Filtre nom :
+    <input [(ngModel)]="filterName" placeholder="chercher..." />
+  </label>
+
+  <label>
+    Tri :
+    <select [(ngModel)]="sortKey">
+      <option value="name">Nom</option>
+      <option value="attack">Attaque</option>
+      <option value="dodge">Esquive</option>
+      <option value="damage">Dégâts</option>
+      <option value="hp">PV</option>
+    </select>
+  </label>
+
+  <label>
+    Sens :
+    <select [(ngModel)]="sortDir">
+      <option value="asc">↑</option>
+      <option value="desc">↓</option>
+    </select>
+  </label>
+
+  <a class="btn" [routerLink]="['/heroes', 'new']">Nouveau héro</a>
+</div>
+
+<table class="list-table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Att</th>
+      <th>Esq</th>
+      <th>Dég</th>
+      <th>PV</th>
+      <th>Arme</th>
+      <th>Total Att</th>
+      <th>Total Esq</th>
+      <th>Total Dég</th>
+      <th>Total PV</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (hero of filteredHeroes; track hero.id) {
+      <tr>
+        <td>{{ hero.name }}</td>
+        <td>{{ hero.attack }}</td>
+        <td>{{ hero.dodge }}</td>
+        <td>{{ hero.damage }}</td>
+        <td>{{ hero.hp }}</td>
+        <td>
+          @if (getWeapon(hero); as weapon) {
+            {{ weapon.name }}
+          } @else {
+            –
+          }
+        </td>
+        <td>{{ hero.totalAttack(getWeapon(hero) || null) }}</td>
+        <td>{{ hero.totalDodge(getWeapon(hero) || null) }}</td>
+        <td>{{ hero.totalDamage(getWeapon(hero) || null) }}</td>
+        <td>{{ hero.totalHp(getWeapon(hero) || null) }}</td>
+        <td>
+          <a [routerLink]="['/heroes', hero.id]">Détails / éditer</a>
+          <button type="button" (click)="delete(hero)">Supprimer</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

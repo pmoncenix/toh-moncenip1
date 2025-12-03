@@ -1,0 +1,150 @@
+<section class="arena">
+  <h2>Arène</h2>
+  <p class="subtitle">
+    Choisis deux héros, puis lance un combat simulé tour par tour.
+  </p>
+
+  <div class="fighters">
+    <div class="fighter-card">
+      <h3>Attaquant</h3>
+      <label>
+        Héros
+        <select [(ngModel)]="selectedAttackerId">
+          <option [ngValue]="null">– choisir –</option>
+          <option *ngFor="let h of heroes" [ngValue]="h.id">
+            {{ h.name }}
+          </option>
+        </select>
+      </label>
+
+      @if (attacker; as h) {
+        @if (getWeaponFor(h); as w) {
+          <p class="weapon-line">
+            Arme équipée : <span>{{ w.name }}</span>
+          </p>
+        } @else {
+          <p class="weapon-line none">Aucune arme équipée</p>
+        }
+
+        <div class="stats">
+          <div class="stat">
+            <span>Att</span>
+            <span>
+              {{ h.attack + (getWeaponFor(h)?.attack ?? 0) }}
+            </span>
+          </div>
+          <div class="stat">
+            <span>Esq</span>
+            <span>
+              {{ h.dodge + (getWeaponFor(h)?.dodge ?? 0) }}
+            </span>
+          </div>
+          <div class="stat">
+            <span>Dég</span>
+            <span>
+              {{ h.damage + (getWeaponFor(h)?.damage ?? 0) }}
+            </span>
+          </div>
+          <div class="stat">
+            <span>PV</span>
+            <span>
+              {{ h.hp + (getWeaponFor(h)?.hp ?? 0) }}
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="vs">
+      <span>VS</span>
+    </div>
+
+    <div class="fighter-card">
+      <h3>Défenseur</h3>
+      <label>
+        Héros
+        <select [(ngModel)]="selectedDefenderId">
+          <option [ngValue]="null">– choisir –</option>
+          <option *ngFor="let h of heroes" [ngValue]="h.id">
+            {{ h.name }}
+          </option>
+        </select>
+      </label>
+
+      @if (defender; as h) {
+        @if (getWeaponFor(h); as w) {
+          <p class="weapon-line">
+            Arme équipée : <span>{{ w.name }}</span>
+          </p>
+        } @else {
+          <p class="weapon-line none">Aucune arme équipée</p>
+        }
+
+        <div class="stats">
+          <div class="stat">
+            <span>Att</span>
+            <span>
+              {{ h.attack + (getWeaponFor(h)?.attack ?? 0) }}
+            </span>
+          </div>
+          <div class="stat">
+            <span>Esq</span>
+            <span>
+              {{ h.dodge + (getWeaponFor(h)?.dodge ?? 0) }}
+            </span>
+          </div>
+          <div class="stat">
+            <span>Dég</span>
+            <span>
+              {{ h.damage + (getWeaponFor(h)?.damage ?? 0) }}
+            </span>
+          </div>
+          <div class="stat">
+            <span>PV</span>
+            <span>
+              {{ h.hp + (getWeaponFor(h)?.hp ?? 0) }}
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="actions">
+    <button
+      type="button"
+      (click)="simulateFight()"
+      [disabled]="!canLaunchFight()"
+    >
+      Lancer le combat
+    </button>
+    <button
+      type="button"
+      class="ghost"
+      (click)="resetFight()"
+      [disabled]="logs.length === 0"
+    >
+      Réinitialiser
+    </button>
+  </div>
+
+  @if (winnerName !== null || logs.length > 0) {
+    <section class="result">
+      @if (winnerName) {
+        <p class="winner">
+          Victoire de
+          <span>{{ winnerName }}</span>
+        </p>
+      } @else if (logs.length > 0) {
+        <p class="winner">Le combat se termine sans vainqueur clair.</p>
+      }
+
+      <div class="log">
+        <h3>Journal du combat</h3>
+        <ul>
+          <li *ngFor="let line of logs">{{ line }}</li>
+        </ul>
+      </div>
+    </section>
+  }
+</section>

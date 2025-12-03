@@ -1,0 +1,35 @@
+<div class="login">
+  <h2 *ngIf="!isRegisterMode">Connexion</h2>
+  <h2 *ngIf="isRegisterMode">Créer un compte</h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <label>
+      Email
+      <input type="email" formControlName="email" autocomplete="email" />
+    </label>
+    <div class="error" *ngIf="form.get('email')?.invalid && (form.get('email')?.touched || form.get('email')?.dirty)">
+      Adresse email invalide (ex : nom@domaine.com).
+    </div>
+
+
+    <label>
+      Mot de passe
+      <input type="password" formControlName="password" />
+    </label>
+    <div class="error" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+      Mot de passe obligatoire (min. 6 caractères).
+    </div>
+
+    <div class="error" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <button type="submit">
+      {{ isRegisterMode ? 'Créer un compte' : 'Se connecter' }}
+    </button>
+
+    <button type="button" class="link" (click)="toggleMode()">
+      {{ isRegisterMode ? 'Déjà un compte ? Se connecter' : "Pas de compte ? S'inscrire" }}
+    </button>
+  </form>
+</div>

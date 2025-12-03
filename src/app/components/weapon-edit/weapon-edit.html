@@ -1,0 +1,76 @@
+<h2>{{ isNew ? 'Nouvelle arme' : 'Éditer arme' }}</h2>
+
+<form [formGroup]="weaponForm" (ngSubmit)="save()" class="form">
+  <div>
+    <label>Id :</label>
+    <input formControlName="id" type="number" readonly />
+  </div>
+
+  <div>
+    <label>Nom :</label>
+    <input formControlName="name" />
+    @if (weaponForm.get('name')?.invalid && weaponForm.get('name')?.touched) {
+      <div class="error">Nom obligatoire</div>
+    }
+  </div>
+
+  <fieldset>
+    <legend>Bonus / malus (entre {{ minValue }} et {{ maxValue }})</legend>
+
+    <div class="stats-grid">
+      <label>
+        Attaque
+        <input type="number" formControlName="attack" />
+      </label>
+      <label>
+        Esquive
+        <input type="number" formControlName="dodge" />
+      </label>
+      <label>
+        Dégâts
+        <input type="number" formControlName="damage" />
+      </label>
+      <label>
+        Points de vie
+        <input type="number" formControlName="hp" />
+      </label>
+    </div>
+
+    <p>
+      Somme des caractéristiques : {{ totalPoints() }} (doit être = 0) –
+      Restants : {{ remainingPoints() }}
+    </p>
+
+    @if (weaponForm.errors?.['range']) {
+      <div class="error">
+        Chaque caractéristique doit être comprise entre {{ minValue }} et
+        {{ maxValue }}.
+      </div>
+    }
+
+    @if (weaponForm.errors?.['totalPoints']) {
+      <div class="error">La somme des caractéristiques doit être égale à 0.</div>
+    }
+  </fieldset>
+
+  <fieldset>
+    <legend>Héros équipés par cette arme</legend>
+
+    @if (heroesUsing.length === 0) {
+      <p>Aucun héro ne porte cette arme.</p>
+    } @else {
+      <ul>
+        @for (hero of heroesUsing; track hero.id) {
+          <li>{{ hero.name }} (id {{ hero.id }})</li>
+        }
+      </ul>
+    }
+  </fieldset>
+
+  <div class="buttons">
+    <button type="submit" [disabled]="weaponForm.invalid">Enregistrer</button>
+    <button type="button" (click)="cancel()">Annuler</button>
+  </div>
+</form>
+
+<a [routerLink]="['/weapons']">Retour à la liste</a>

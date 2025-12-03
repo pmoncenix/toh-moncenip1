@@ -1,0 +1,61 @@
+<h2>Équipements</h2>
+
+<div class="toolbar">
+  <label>
+    Filtre nom :
+    <input [(ngModel)]="filterName" placeholder="chercher..." />
+  </label>
+
+  <label>
+    Tri :
+    <select [(ngModel)]="sortKey">
+      <option value="name">Nom</option>
+      <option value="attack">Attaque</option>
+      <option value="dodge">Esquive</option>
+      <option value="damage">Dégâts</option>
+      <option value="hp">PV</option>
+    </select>
+  </label>
+
+  <label>
+    Sens :
+    <select [(ngModel)]="sortDir">
+      <option value="asc">↑</option>
+      <option value="desc">↓</option>
+    </select>
+  </label>
+
+  <a class="btn" [routerLink]="['/weapons', 'new']">Nouvelle arme</a>
+</div>
+
+<table class="list-table">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Att</th>
+      <th>Esq</th>
+      <th>Dég</th>
+      <th>PV</th>
+      <th>Σ</th>
+      <th>Héros équipés</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (weapon of filteredWeapons; track weapon.id) {
+      <tr>
+        <td>{{ weapon.name }}</td>
+        <td>{{ weapon.attack }}</td>
+        <td>{{ weapon.dodge }}</td>
+        <td>{{ weapon.damage }}</td>
+        <td>{{ weapon.hp }}</td>
+        <td>{{ weapon.totalPoints }}</td>
+        <td>{{ heroNamesFor(weapon) }}</td>
+        <td>
+          <a [routerLink]="['/weapons', weapon.id]">Détails / éditer</a>
+          <button type="button" (click)="delete(weapon)">Supprimer</button>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

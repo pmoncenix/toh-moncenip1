@@ -1,0 +1,106 @@
+<h2>{{ isNew ? 'Nouveau héro' : 'Éditer héro' }}</h2>
+
+<form [formGroup]="heroForm" (ngSubmit)="save()" class="form">
+  <div>
+    <label>Id :</label>
+    <input formControlName="id" type="number" readonly />
+  </div>
+
+  <div>
+    <label>Nom :</label>
+    <input formControlName="name" />
+    @if (heroForm.get('name')?.invalid && heroForm.get('name')?.touched) {
+      <div class="error">Nom obligatoire</div>
+    }
+  </div>
+
+  <fieldset>
+    <legend>Caractéristiques (max {{ maxPoints }} pts)</legend>
+
+    <div class="stats-grid">
+      <label>
+        Attaque
+        <input type="number" formControlName="attack" />
+      </label>
+      <label>
+        Esquive
+        <input type="number" formControlName="dodge" />
+      </label>
+      <label>
+        Dégâts
+        <input type="number" formControlName="damage" />
+      </label>
+      <label>
+        Points de vie
+        <input type="number" formControlName="hp" />
+      </label>
+    </div>
+
+    <p>
+      Points utilisés : {{ totalPoints() }} / {{ maxPoints }} –
+      <strong [class.error]="remainingPoints() < 0">
+        Restants : {{ remainingPoints() }}
+      </strong>
+    </p>
+
+    @if (heroForm.errors?.['totalPoints']) {
+      <div class="error">
+        La somme des caractéristiques doit être ≤ {{ maxPoints }}.
+      </div>
+    }
+  </fieldset>
+
+  <fieldset>
+    <legend>Arme</legend>
+
+    <label>
+      Arme équipée :
+      <select formControlName="weaponId">
+        <option [ngValue]="null">Aucune</option>
+        @for (weapon of weapons; track weapon.id) {
+          <option
+            [ngValue]="weapon.id"
+            [disabled]="isWeaponTaken(weapon) || !canEquipWeapon(weapon)"
+          >
+            {{ weapon.name }}
+            (Att {{ weapon.attack }}, Esq {{ weapon.dodge }}, Dég
+            {{ weapon.damage }}, PV {{ weapon.hp }})
+          </option>
+        }
+      </select>
+    </label>
+
+    @if (weaponWouldBreakConstraint()) {
+      <div class="error">
+        Cette arme ferait passer au moins une caractéristique en dessous de 1,
+        elle ne peut pas être équipée.
+      </div>
+    }
+
+    @if (selectedWeapon(); as weapon) {
+      <p>
+        Totaux avec arme :
+        Att
+        {{ (heroForm.value.attack ?? 0) + weapon.attack }},
+        Esq
+        {{ (heroForm.value.dodge ?? 0) + weapon.dodge }},
+        Dég
+        {{ (heroForm.value.damage ?? 0) + weapon.damage }},
+        PV
+        {{ (heroForm.value.hp ?? 0) + weapon.hp }}
+      </p>
+    }
+  </fieldset>
+
+  <div class="buttons">
+    <button
+      type="submit"
+      [disabled]="heroForm.invalid || weaponWouldBreakConstraint()"
+    >
+      Enregistrer
+    </button>
+    <button type="button" (click)="cancel()">Annuler</button>
+  </div>
+</form>
+
+<a [routerLink]="['/heroes']">Retour à la liste</a>
