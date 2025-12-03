@@ -7,8 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "github-build": "ng build --configuration production --base-href \"https://<ton-user-github>.github.io/toh-moncenip1/\"",
-    "github-deploy": "npx angular-cli-ghpages --dir=dist/moncenip-toh2025/browser"
+    "build:gh": "ng build --configuration production --base-href=/toh-moncenip1/",
+    "deploy:gh": "npx angular-cli-ghpages --dir=dist/moncenip-toh2025/browser --no-silent"
   },
   "prettier": {
     "printWidth": 100,
